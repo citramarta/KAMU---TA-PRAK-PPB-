@@ -7,7 +7,6 @@ import Header from "../components/Header.jsx";
 import { LoginPrompt } from "../components/States.jsx";
 import { IconX } from "../components/Icons.jsx";
 import { compressImage, formatBytes } from "../utils/image.js";
-import "./Sell.css";
 
 const EMPTY = {
   title: "",
