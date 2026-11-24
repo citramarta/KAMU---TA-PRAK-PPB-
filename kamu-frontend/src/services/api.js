@@ -1,5 +1,10 @@
 // Semua pemanggilan ke API KAMU (Express + Neon) lewat file ini.
-const BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/+$/, "");
+const BASE = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/+$/, "");
+
+// Foto hasil upload disimpan sebagai path relatif ("/api/items/:id/image").
+// Diubah menjadi URL lengkap ke server API. URL lain (https://..., data:...) dibiarkan.
+export const isApiImage = (url) => Boolean(url) && url.startsWith("/");
+export const resolveImage = (url) => (isApiImage(url) ? `${BASE}${url}` : url);
 
 async function request(path, { method = "GET", body, signal } = {}) {
   let res;

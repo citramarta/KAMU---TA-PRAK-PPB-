@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext.jsx";
-import { conditionLabel, formatRupiah, initials } from "../utils/format.js";
+import { isApiImage, resolveImage } from "../services/api.js";
+import { conditionLabel, formatRupiah, initials, toDirectImageUrl } from "../utils/format.js";
 import { IconHeart, IconImage } from "./Icons.jsx";
 
 // Gambar dengan fallback jika URL kosong / gagal dimuat (mis. saat offline)
@@ -14,7 +15,17 @@ export function ProductImage({ src, alt }) {
       </div>
     );
   }
-  return <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />;
+  return (
+    <img
+      src={resolveImage(toDirectImageUrl(src))}
+      alt={alt}
+      loading="lazy"
+      referrerPolicy="no-referrer"
+      // crossOrigin: agar foto dari API bisa disimpan service worker untuk mode offline
+      crossOrigin={isApiImage(src) ? "anonymous" : undefined}
+      onError={() => setFailed(true)}
+    />
+  );
 }
 
 export default function ProductCard({ item, compact = false }) {

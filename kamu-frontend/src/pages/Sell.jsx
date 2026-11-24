@@ -5,7 +5,9 @@ import { useAsync } from "../hooks/useAsync.js";
 import { useApp } from "../context/AppContext.jsx";
 import Header from "../components/Header.jsx";
 import { LoginPrompt } from "../components/States.jsx";
-import { ProductImage } from "../components/ProductCard.jsx";
+import { IconX } from "../components/Icons.jsx";
+import { compressImage, formatBytes } from "../utils/image.js";
+import "./Sell.css";
 
 const EMPTY = {
   title: "",
@@ -13,7 +15,6 @@ const EMPTY = {
   condition: "preloved",
   condition_note: "",
   category_id: "",
-  image_url: "",
   description: "",
 };
 
@@ -22,6 +23,9 @@ export default function Sell() {
   const navigate = useNavigate();
   const cats = useAsync((signal) => api.categories(signal), []);
   const [form, setForm] = useState(EMPTY);
+  const [photo, setPhoto] = useState(null); // { dataUrl, bytes }
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -36,12 +40,39 @@ export default function Sell() {
     );
   }
 
+  // Foto dipilih (klik atau seret) -> diperkecil di browser sebelum diunggah
+  async function handleFile(file) {
+    setError("");
+    setPhotoBusy(true);
+    try {
+      setPhoto(await compressImage(file));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setPhotoBusy(false);
+    }
+  }
+
+  function onPick(e) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // supaya foto yang sama bisa dipilih lagi
+    if (file) handleFile(file);
+  }
+
+  function onDrop(e) {
+    e.preventDefault();
+    setDragging(false);
+    const file = e.dataTransfer?.files?.[0];
+    if (file) handleFile(file);
+  }
+
   async function submit(e) {
     e.preventDefault();
     setError("");
     const price = Number(form.price);
     if (!form.title.trim()) return setError("Nama barang wajib diisi.");
-    if (!Number.isFinite(price) || price < 0 || form.price === "") return setError("Harga tidak valid.");
+    if (form.price === "" || !Number.isFinite(price) || price < 0) return setError("Harga tidak valid.");
+    if (photoBusy) return setError("Tunggu sebentar, foto sedang diproses.");
 
     setBusy(true);
     try {
@@ -51,8 +82,8 @@ export default function Sell() {
         condition: form.condition,
         condition_note: form.condition_note.trim() || null,
         category_id: form.category_id || null,
-        image_url: form.image_url.trim() || null,
         description: form.description.trim() || null,
+        image_base64: photo ? photo.dataUrl : undefined,
         seller_id: user.id,
       });
       notify("Barang berhasil diposting 🎉");
@@ -74,6 +105,53 @@ export default function Sell() {
             {error}
           </div>
         )}
+
+        <div className="field">
+          <span className="label" id="photo-label">
+            Foto barang
+          </span>
+          {photo ? (
+            <div className="photo-preview">
+              <img src={photo.dataUrl} alt="Pratinjau foto barang" />
+              <button type="button" className="photo-remove" onClick={() => setPhoto(null)} aria-label="Hapus foto">
+                <IconX size={18} />
+              </button>
+              <label className="btn btn-light btn-sm photo-change">
+                Ganti foto
+                <input type="file" accept="image/*" className="sr-only" onChange={onPick} />
+              </label>
+              <span className="photo-size">{formatBytes(photo.bytes)}</span>
+            </div>
+          ) : (
+            <label
+              className={`photo-drop${dragging ? " dragging" : ""}${photoBusy ? " busy" : ""}`}
+              aria-labelledby="photo-label"
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDragging(true);
+              }}
+              onDragLeave={() => setDragging(false)}
+              onDrop={onDrop}
+            >
+              {photoBusy ? (
+                <>
+                  <span className="spinner" />
+                  <strong>Memproses foto…</strong>
+                </>
+              ) : (
+                <>
+                  <span className="photo-emoji" aria-hidden="true">
+                    📷
+                  </span>
+                  <strong>Tambah foto barang</strong>
+                  <small>Pilih dari galeri atau ambil dengan kamera</small>
+                </>
+              )}
+              <input type="file" accept="image/*" className="sr-only" onChange={onPick} disabled={photoBusy} />
+            </label>
+          )}
+          <small className="hint">Barang dengan foto lebih cepat laku.</small>
+        </div>
 
         <div className="field">
           <span className="label">Kondisi barang</span>
@@ -124,21 +202,11 @@ export default function Sell() {
         </div>
 
         <div className="field">
-          <label htmlFor="image">Link foto (opsional)</label>
-          <input id="image" type="url" inputMode="url" value={form.image_url} onChange={set("image_url")} placeholder="https://…/foto.jpg" />
-          {form.image_url.trim() && (
-            <div className="image-preview">
-              <ProductImage key={form.image_url} src={form.image_url.trim()} alt="Pratinjau foto" />
-            </div>
-          )}
-        </div>
-
-        <div className="field">
           <label htmlFor="desc">Deskripsi</label>
           <textarea id="desc" rows="4" value={form.description} onChange={set("description")} placeholder="Ceritakan kondisi, kelengkapan, dan alasan menjual." />
         </div>
 
-        <button className="btn btn-primary btn-block" type="submit" disabled={busy}>
+        <button className="btn btn-primary btn-block" type="submit" disabled={busy || photoBusy}>
           {busy ? "Memposting…" : "Posting Barang"}
         </button>
       </form>

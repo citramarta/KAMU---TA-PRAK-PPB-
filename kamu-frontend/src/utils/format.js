@@ -42,3 +42,15 @@ export const initials = (name = "") =>
     .join("") || "K";
 
 export const conditionLabel = (c) => (c === "baru" ? "Baru" : "Preloved");
+
+// Tautan "bagikan" Google Drive adalah halaman web, bukan file gambar, sehingga tidak bisa
+// ditampilkan di <img>. Fungsi ini mengubahnya menjadi tautan gambar langsung.
+// Tautan lain dibiarkan apa adanya.
+export function toDirectImageUrl(raw) {
+  const url = String(raw || "").trim();
+  if (!url) return "";
+  const match = url.match(
+    /drive\.google\.com\/(?:file\/d\/|open\?(?:[^#]*&)?id=|uc\?(?:[^#]*&)?id=|thumbnail\?(?:[^#]*&)?id=)([\w-]{10,})/i
+  );
+  return match ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1200` : url;
+}
