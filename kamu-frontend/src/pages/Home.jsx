@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../services/api.js";
@@ -180,6 +181,16 @@ export default function Home() {
         )}
       </section>
 
+      {preloved.length > 0 && (
+        <section className="section">
+          <div className="section-head">
+            <h2>Preloved Pilihan</h2>
+            <Link to="/jelajah?kondisi=preloved">Lihat semua</Link>
+          </div>
+          <ProductGrid items={preloved} className="limit" />
+        </section>
+      )}
+
       <div className="features" aria-label="Keunggulan KAMU">
         {FEATURES.map(({ Icon, title, sub }) => (
           <div className="feature" key={title}>
@@ -191,16 +202,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-
-      {preloved.length > 0 && (
-        <section className="section">
-          <div className="section-head">
-            <h2>Preloved Pilihan</h2>
-            <Link to="/jelajah?kondisi=preloved">Lihat semua</Link>
-          </div>
-          <ProductGrid items={preloved} className="limit" />
-        </section>
-      )}
     </div>
   );
 }
