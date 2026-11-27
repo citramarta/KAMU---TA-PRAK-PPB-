@@ -11,7 +11,7 @@ export const WishlistModel = {
       JOIN items i ON i.id = w.item_id
       LEFT JOIN categories c ON c.id = i.category_id
       JOIN users u ON u.id = i.seller_id
-      WHERE w.user_id = ${user_id}
+      WHERE w.user_id = ${user_id} AND i.status IN ('available', 'sold')
       ORDER BY w.created_at DESC`;
   },
   // Idempotent: menambah barang yang sudah ada di wishlist tidak error

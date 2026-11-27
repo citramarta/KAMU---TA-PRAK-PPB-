@@ -35,7 +35,20 @@ export default function Detail() {
 
   const wished = wishIds.has(item.id);
   const isOwner = user?.id === item.seller_id;
+
+  if ((item.status === "draft" || item.status === "archived") && !isOwner) {
+    return (
+      <div className="page">
+        <button className="icon-btn" onClick={goBack} aria-label="Kembali">
+          <IconArrowLeft size={22} />
+        </button>
+        <ErrorBox message="Barang ini sudah tidak tersedia." />
+      </div>
+    );
+  }
   const sold = item.status === "sold";
+  const STATUS_LABEL = { available: "Tersedia", sold: "Terjual", draft: "Draf", archived: "Diarsipkan" };
+  const hidden = item.status === "draft" || item.status === "archived";
   const wa = toWaNumber(item.seller_whatsapp);
   const waText = `Halo ${item.seller_name}, aku tertarik dengan "${item.title}" di KAMU. Apakah masih tersedia?`;
 
@@ -75,6 +88,7 @@ export default function Detail() {
       <div className="detail-sheet">
         <p className="detail-kicker">
           {item.category_name || "Lainnya"}
+          {item.category_other ? ` • ${item.category_other}` : ""}
           {item.condition_note ? ` • ${item.condition_note}` : ""}
         </p>
         <h1 className="detail-title">{item.title}</h1>
@@ -95,7 +109,7 @@ export default function Detail() {
           </div>
           <div>
             <dt>Status</dt>
-            <dd>{sold ? "Terjual" : "Tersedia"}</dd>
+            <dd>{STATUS_LABEL[item.status] || "Tersedia"}</dd>
           </div>
         </dl>
 
@@ -116,6 +130,13 @@ export default function Detail() {
           </Link>
         </section>
 
+        {isOwner && hidden && (
+          <p className="tip">
+            {item.status === "draft"
+              ? "Barang ini masih draf dan belum tampil di katalog. Hanya kamu yang bisa melihatnya."
+              : "Barang ini diarsipkan dan tidak tampil di katalog. Aktifkan lagi dari Profil kapan saja."}
+          </p>
+        )}
         <p className="tip">
           Tips aman: ketemuan (COD) di area kampus yang ramai dan cek barang sebelum membayar.
         </p>
@@ -127,8 +148,8 @@ export default function Detail() {
           <strong className="cta-price">{formatRupiah(item.price)}</strong>
         </div>
         {isOwner ? (
-          <Link to="/profil" className="btn btn-ghost">
-            Ini barangmu
+          <Link to={`/barang/${item.id}/edit`} className="btn btn-primary">
+            Edit Barang
           </Link>
         ) : sold ? (
           <button className="btn btn-primary" disabled>

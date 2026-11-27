@@ -49,11 +49,12 @@ export const api = {
   item: (id, signal) => request(`/api/items/${id}`, { signal }),
   createItem: (body) => request("/api/items", { method: "POST", body }),
   updateItem: (id, body) => request(`/api/items/${id}`, { method: "PUT", body }),
-  deleteItem: (id) => request(`/api/items/${id}`, { method: "DELETE" }),
+  deleteItem: (id, sellerId) => request(`/api/items/${id}${qs({ seller_id: sellerId })}`, { method: "DELETE" }),
 
   // user
   login: (nim) => request("/api/users/login", { method: "POST", body: { nim } }),
   register: (body) => request("/api/users", { method: "POST", body }),
+  updateUser: (id, body) => request(`/api/users/${id}`, { method: "PUT", body }),
 
   // wishlist / favorit
   wishlist: (userId, signal) => request(`/api/wishlists${qs({ user_id: userId })}`, { signal }),

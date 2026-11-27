@@ -2052,3 +2052,379 @@ label.btn:focus-within {
   outline-offset: 2px;
 }
 
+/* ==========================================
+   ITEM FORM - JUAL DAN EDIT BARANG
+========================================== */
+
+.req {
+  color: var(--pink-strong);
+  margin-left: 2px;
+}
+
+.field-error {
+  color: #9b2f53;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: var(--pink-strong);
+  background: #fff7f9;
+}
+
+.field-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.price-preview {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.field-reveal {
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--pink-soft);
+}
+
+.form-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.status-note {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--green-soft);
+  color: var(--green-deep);
+  font-size: 13.5px;
+}
+
+/* Area unggah foto */
+.photo-drop {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 36px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--pink-soft);
+  border: 2px solid transparent;
+  border-radius: 20px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.photo-emoji {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.photo-drop strong {
+  font-size: 18px;
+  color: #a8365f;
+}
+
+.photo-drop small {
+  color: #7b5f69;
+  font-size: 14px;
+}
+
+.photo-drop:hover {
+  background: #f8d6df;
+}
+
+.photo-drop.dragging {
+  background: var(--green-soft);
+  border: 2px dashed var(--green);
+}
+
+.photo-drop:focus-within {
+  outline: 3px solid var(--pink-strong);
+  outline-offset: 2px;
+}
+
+.photo-drop.busy {
+  cursor: progress;
+}
+
+.photo-preview {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--pink-soft);
+}
+
+.photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 253, 249, 0.95);
+  color: #9b2f53;
+  box-shadow: 0 2px 8px rgba(18, 53, 36, 0.2);
+}
+
+.photo-change {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  cursor: pointer;
+}
+
+.photo-size {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(18, 53, 36, 0.72);
+  color: var(--bone);
+  font-size: 12px;
+}
+
+label.btn:focus-within {
+  outline: 3px solid var(--pink-strong);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   PROFILE - TAB BARANG SAYA
+========================================== */
+
+.profile-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  overflow-x: auto;
+  background: var(--green-soft);
+  border-radius: 16px;
+  scrollbar-width: none;
+}
+
+.profile-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.profile-tabs .tab {
+  flex: 1 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+.profile-tabs .tab[aria-selected="true"] {
+  background: var(--green);
+  color: var(--bone);
+}
+
+.tab-count {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(31, 77, 58, 0.12);
+  font-size: 11.5px;
+}
+
+.tab[aria-selected="true"] .tab-count {
+  background: rgba(248, 244, 236, 0.22);
+}
+
+.status-draft {
+  background: #fff;
+  color: #9b2f53;
+  border: 1px dashed var(--pink-strong);
+}
+
+.status-archived {
+  background: #ece8de;
+  color: var(--muted);
+}
+
+/* =========================
+   EDIT PROFIL KAMU
+========================= */
+
+.profile-card {
+  position: relative;
+}
+
+.profile-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-avatar-image {
+  display: block;
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-edit-button {
+  align-self: flex-start;
+}
+
+.profile-edit-panel {
+  margin: 16px 0 24px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e9eee9;
+  border-radius: 18px;
+}
+
+.profile-edit-panel h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.profile-edit-description {
+  margin: 0 0 20px;
+  color: #777;
+  font-size: 13px;
+}
+
+.profile-photo-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.profile-photo-preview {
+  width: 104px;
+  height: 104px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #e6f1e8;
+}
+
+.profile-photo-label {
+  cursor: pointer;
+}
+
+.profile-photo-hint {
+  color: #888;
+  font-size: 12px;
+  text-align: center;
+}
+
+.profile-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 15px;
+}
+
+.profile-form-field > span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #344638;
+}
+
+.profile-form-field input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #dfe7df;
+  border-radius: 10px;
+  background: #fff;
+  color: #26352a;
+  font: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.profile-form-field input:focus {
+  outline: none;
+  border-color: #65a878;
+  box-shadow: 0 0 0 3px rgba(220, 232, 224, 0.12);
+}
+
+.profile-form-field input:disabled {
+  background: #f3f5f3;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.profile-form-field small {
+  color: #888;
+  font-size: 11px;
+}
+
+.profile-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+@media (max-width: 480px) {
+  .profile-card {
+    flex-wrap: wrap;
+  }
+
+  .profile-edit-button {
+    margin-left: 82px;
+  }
+
+  .profile-edit-panel {
+    padding: 16px;
+  }
+
+  .profile-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .profile-form-actions .btn {
+    width: 100%;
+  }
+}
+
+/* Tombol Edit Profil dan Tutup */
+.profile-edit-button {
+  background: #dff3e4 !important;
+  color: #247343 !important;
+  border: 1px solid #a9d9b7 !important;
+  font-weight: 700;
+  padding: 9px 16px;
+  border-radius: 10px;
+  transition: 0.2s ease;
+}
+
+.profile-edit-button:hover {
+  background: #c8ebd2 !important;
+  color: #185d34 !important;
+}

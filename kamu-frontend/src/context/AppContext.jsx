@@ -12,6 +12,7 @@ const readUser = () => {
     return null;
   }
 };
+
 const writeUser = (user) => {
   try {
     if (user) localStorage.setItem(KEY, JSON.stringify(user));
@@ -44,6 +45,7 @@ export function AppProvider({ children }) {
       setWishlist([]);
       return;
     }
+
     setWishLoading(true);
     try {
       setWishlist(await api.wishlist(userId));
@@ -60,13 +62,15 @@ export function AppProvider({ children }) {
 
   const wishIds = useMemo(() => new Set(wishlist.map((w) => w.id)), [wishlist]);
 
-  // Mengembalikan "login" jika belum masuk, selain itu "added" / "removed"
   const toggleWish = useCallback(
     async (item) => {
       if (!user) return "login";
+
       const had = wishIds.has(item.id);
-      // optimistic update supaya terasa instan
-      setWishlist((prev) => (had ? prev.filter((w) => w.id !== item.id) : [{ ...item }, ...prev]));
+      setWishlist((prev) =>
+        had ? prev.filter((w) => w.id !== item.id) : [{ ...item }, ...prev]
+      );
+
       try {
         if (had) await api.removeWishlist(user.id, item.id);
         else await api.addWishlist(user.id, item.id);
@@ -74,6 +78,7 @@ export function AppProvider({ children }) {
         await loadWishlist(user.id);
         throw err;
       }
+
       return had ? "removed" : "added";
     },
     [user, wishIds, loadWishlist]
@@ -94,6 +99,16 @@ export function AppProvider({ children }) {
     return u;
   }, []);
 
+  const updateProfile = useCallback(async (data) => {
+    if (!user?.id) throw new Error("Kamu belum login.");
+
+    const updatedUser = await api.updateUser(user.id, data);
+    writeUser(updatedUser);
+    setUser(updatedUser);
+
+    return updatedUser;
+  }, [user]);
+
   const logout = useCallback(() => {
     writeUser(null);
     setUser(null);
@@ -106,12 +121,15 @@ export function AppProvider({ children }) {
       e.preventDefault();
       setInstallEvent(e);
     };
+
     const onInstalled = () => {
       setInstalled(true);
       setInstallEvent(null);
     };
+
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", onInstalled);
+
     return () => {
       window.removeEventListener("beforeinstallprompt", onPrompt);
       window.removeEventListener("appinstalled", onInstalled);
@@ -129,6 +147,7 @@ export function AppProvider({ children }) {
     user,
     login,
     register,
+    updateProfile,
     logout,
     wishlist,
     wishIds,

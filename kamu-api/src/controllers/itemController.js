@@ -1,9 +1,10 @@
 import { ItemModel } from "../models/itemModel.js";
-import { handle, badRequest } from "../utils/handle.js";
+import { handle } from "../utils/handle.js";
 
 export const ItemController = {
   getAll: handle((req) => ItemModel.getAll(req.query)),
   getById: handle((req) => ItemModel.getById(req.params.id)),
+
   // Mengirim foto sebagai gambar (bukan JSON), di-cache lama karena tidak pernah berubah
   image: async (req, res) => {
     try {
@@ -19,11 +20,9 @@ export const ItemController = {
       res.status(status).json({ error: status === 404 ? "Foto tidak ditemukan" : err.message });
     }
   },
-  create: handle((req) => {
-    const { title, seller_id } = req.body ?? {};
-    if (!title || !seller_id) throw badRequest("title dan seller_id wajib diisi");
-    return ItemModel.create(req.body);
-  }, 201),
+
+  // Validasi isi barang dilakukan di ItemModel (butuh pengecekan kategori di database)
+  create: handle((req) => ItemModel.create(req.body ?? {}), 201),
   update: handle((req) => ItemModel.update(req.params.id, req.body ?? {})),
-  remove: handle((req) => ItemModel.remove(req.params.id)),
+  remove: handle((req) => ItemModel.remove(req.params.id, req.query.seller_id)),
 };

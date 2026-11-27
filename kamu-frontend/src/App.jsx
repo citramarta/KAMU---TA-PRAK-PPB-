@@ -6,15 +6,14 @@ import TopNav from "./components/TopNav.jsx";
 import Footer from "./components/Footer.jsx";
 import OfflineBanner from "./components/OfflineBanner.jsx";
 import { EmptyState } from "./components/States.jsx";
-
 import Home from "./pages/Home.jsx";
 import Explore from "./pages/Explore.jsx";
 import Detail from "./pages/Detail.jsx";
 import Sell from "./pages/Sell.jsx";
+import EditItem from "./pages/EditItem.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import Profile from "./pages/Profile.jsx";
 import About from "./pages/About.jsx";
-import FAQ from "./pages/FAQ.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 
@@ -34,23 +33,18 @@ export default function App() {
     <div className="app-shell">
       <OfflineBanner />
       <TopNav />
-
       <main className={`app-main${hideNav ? " no-nav" : ""}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/jelajah" element={<Explore />} />
           <Route path="/barang/:id" element={<Detail />} />
           <Route path="/jual" element={<Sell />} />
+          <Route path="/barang/:id/edit" element={<EditItem />} />
           <Route path="/favorit" element={<Wishlist />} />
           <Route path="/profil" element={<Profile />} />
           <Route path="/tentang" element={<About />} />
-
-          {/* HALAMAN FAQ */}
-          <Route path="/faq" element={<FAQ />} />
-
           <Route path="/login" element={<Login />} />
           <Route path="/daftar" element={<Register />} />
-
           <Route
             path="*"
             element={
@@ -69,17 +63,10 @@ export default function App() {
           />
         </Routes>
       </main>
-
       <Footer />
-
       {!hideNav && <BottomNav />}
-
       {toast && (
-        <div
-          className={`toast${hideNav ? " no-nav" : ""}`}
-          role="status"
-          aria-live="polite"
-        >
+        <div className={`toast${hideNav ? " no-nav" : ""}`} role="status" aria-live="polite">
           {toast}
         </div>
       )}

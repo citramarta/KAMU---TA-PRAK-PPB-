@@ -4,9 +4,9 @@ import { IconDownload } from "../components/Icons.jsx";
 
 // ====== ISI DATA DIRIMU DI SINI ======
 const DEVELOPER = {
-  nama: "Nama Lengkap Kamu",
-  nim: "NIM Kamu",
-  kelompok: "Kelompok X",
+  nama: "Citra Marta Fatmala",
+  nim: "21120124120012",
+  kelompok: "Kelompok 23",
   kelas: "Praktikum PPB",
 };
 // =====================================
